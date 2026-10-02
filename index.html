@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VibroClock - Ovsiz Vibratsiyali Budilnik va Taymer</title>
+  <meta name="description" content="Ovoz chiqarmasdan faqat tebranish (vibratsiya) orqali ogohlantiruvchi aqlli budilnik va taymer veb-ilovasi." />
+  <meta name="theme-color" id="meta-theme-color" content="#090b10" />
+
+  <!-- PWA Manifest & Apple Touch -->
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="apple-touch-icon" href="./assets/icon-192.png" />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <!-- Visual Vibration Background Layer -->
+  <div id="vibration-fx-overlay" class="vibration-fx-overlay"></div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+            <circle cx="12" cy="12" r="6"/>
+            <polyline points="12 9 12 12 14 14"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 data-i18n="appTitle">VibroClock</h1>
+          <span class="badge-silent" data-i18n="badgeSilent">100% Ovsiz / Silent Vibro</span>
+        </div>
+      </div>
+
+      <!-- Live Clock Display -->
+      <div class="header-clock" id="header-live-clock">
+        <div class="time" id="live-time-str">00:00:00</div>
+        <div class="date" id="live-date-str">Juma, 2 Oktyabr</div>
+      </div>
+
+      <!-- Vibration Status Indicator -->
+      <div class="vibro-status-badge" id="vibro-support-badge">
+        <span class="dot"></span>
+        <span id="vibro-status-text" data-i18n="vibroReady">Vibratsiya Tayyor</span>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs (Stopwatch removed, Settings added) -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="tab-alarms">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M5 3L2 6M22 6l-3-3M12 9v4l3 2"/></svg>
+        <span data-i18n="tabAlarms">Budilnik</span>
+      </button>
+      <button class="nav-tab" data-tab="tab-timer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span data-i18n="tabTimer">Taymer</span>
+      </button>
+      <button class="nav-tab" data-tab="tab-patterns">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h3l2-9 4 18 3-12 2 6 3-3h3"/></svg>
+        <span data-i18n="tabPatterns">Vibro Lab</span>
+      </button>
+      <button class="nav-tab" data-tab="tab-settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <span data-i18n="tabSettings">Sozlamalar</span>
+      </button>
+    </nav>
+
+    <!-- TAB 1: ALARMS -->
+    <main class="tab-content active" id="tab-alarms">
+      <div class="section-header">
+        <div>
+          <h2 data-i18n="alarmsHeading">Budilniklar</h2>
+          <p class="subtitle" data-i18n="alarmsSubtitle">Ovsiz tebranish orqali uyg'otuvchi va eslatuvchi signallar</p>
+        </div>
+        <button class="btn btn-primary" id="btn-open-add-alarm">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span data-i18n="addAlarmBtn">Yangisini qo'shish</span>
+        </button>
+      </div>
+
+      <div class="alarms-list" id="alarms-container">
+        <!-- Alarm cards rendered dynamically -->
+      </div>
+    </main>
+
+    <!-- TAB 2: TIMER (Updated Presets: 5m, 10m, 25m, 30m) -->
+    <main class="tab-content" id="tab-timer">
+      <div class="timer-wrapper">
+        <div class="timer-display-container">
+          <svg class="timer-progress-ring" viewBox="0 0 220 220">
+            <circle class="ring-bg" cx="110" cy="110" r="98"/>
+            <circle class="ring-fg" id="timer-progress-circle" cx="110" cy="110" r="98"/>
+          </svg>
+          <div class="timer-display-inner">
+            <div class="timer-digits" id="timer-digits-display">05:00</div>
+            <div class="timer-status-label" id="timer-status-label" data-i18n="timerStatusReady">Tayyor</div>
+          </div>
+        </div>
+
+        <!-- Preset Buttons (5, 10, 25, 30 mins) -->
+        <div class="timer-presets">
+          <button class="preset-chip active" data-seconds="300" data-i18n="preset5m">5 minut</button>
+          <button class="preset-chip" data-seconds="600" data-i18n="preset10m">10 minut</button>
+          <button class="preset-chip" data-seconds="1500" data-i18n="preset25m">25 minut (Pomodoro)</button>
+          <button class="preset-chip" data-seconds="1800" data-i18n="preset30m">30 minut</button>
+        </div>
+
+        <!-- Custom Duration Inputs (Hours, Minutes, Seconds) -->
+        <div class="timer-input-group">
+          <div class="input-unit">
+            <input type="number" id="timer-input-hours" min="0" max="23" value="0" placeholder="00" />
+            <label data-i18n="labelHours">Soat</label>
+          </div>
+          <span class="colon">:</span>
+          <div class="input-unit">
+            <input type="number" id="timer-input-minutes" min="0" max="59" value="5" placeholder="00" />
+            <label data-i18n="labelMinutes">Daqiqa</label>
+          </div>
+          <span class="colon">:</span>
+          <div class="input-unit">
+            <input type="number" id="timer-input-seconds" min="0" max="59" value="0" placeholder="00" />
+            <label data-i18n="labelSeconds">Soniya</label>
+          </div>
+        </div>
+
+        <!-- Pattern Selector for Timer -->
+        <div class="vibro-selector-box">
+          <label for="timer-pattern-select">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h3l2-9 4 18 3-12 2 6 3-3h3"/></svg>
+            <span data-i18n="alarmPatternLabel">Vibratsiya Patterni:</span>
+          </label>
+          <select id="timer-pattern-select" class="custom-select">
+            <option value="standard">Standart Pul's (500ms / 250ms)</option>
+            <option value="heartbeat">Yurak Urishi (Heartbeat)</option>
+            <option value="sos">SOS Rejimi (3 short, 3 long)</option>
+            <option value="tremor">Tezkor Tremor (100ms)</option>
+            <option value="wave">Ritmik Tebranish (Escalating)</option>
+          </select>
+        </div>
+
+        <!-- Controls -->
+        <div class="timer-controls">
+          <button class="btn btn-secondary" id="btn-timer-reset">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+            <span data-i18n="btnReset">Qayta o'rnatish</span>
+          </button>
+          <button class="btn btn-primary btn-lg" id="btn-timer-start">
+            <svg id="timer-start-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+            <span id="timer-start-text" data-i18n="btnStart">Boshlash</span>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <!-- TAB 3: VIBRO LAB -->
+    <main class="tab-content" id="tab-patterns">
+      <div class="vibro-lab-wrapper">
+        <div class="section-header">
+          <div>
+            <h2 data-i18n="labHeading">Vibratsiya Labaratoriyasi</h2>
+            <p class="subtitle" data-i18n="labSubtitle">Mavjud tebranish ritmlarini sinang yoki o'zingiznikini yarating</p>
+          </div>
+        </div>
+
+        <div class="patterns-grid">
+          <div class="pattern-card">
+            <div class="pattern-info">
+              <h3>Standart Pul's</h3>
+              <p>O'rtacha chastotadagi klassik tebranish (500ms tebranish / 250ms pauza)</p>
+            </div>
+            <button class="btn btn-outline btn-test-pattern" data-pattern="standard">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span data-i18n="btnTest">Sinash</span>
+            </button>
+          </div>
+
+          <div class="pattern-card">
+            <div class="pattern-info">
+              <h3>Yurak Urishi (Heartbeat)</h3>
+              <p>Ikki qisqa tebranish va uzoqroq pauza ritmi</p>
+            </div>
+            <button class="btn btn-outline btn-test-pattern" data-pattern="heartbeat">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span data-i18n="btnTest">Sinash</span>
+            </button>
+          </div>
+
+          <div class="pattern-card">
+            <div class="pattern-info">
+              <h3>SOS Shoshilinch Rejim</h3>
+              <p>Xalqaro SOS morze kodi (3 qisqa, 3 uzun, 3 qisqa)</p>
+            </div>
+            <button class="btn btn-outline btn-test-pattern" data-pattern="sos">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span data-i18n="btnTest">Sinash</span>
+            </button>
+          </div>
+
+          <div class="pattern-card">
+            <div class="pattern-info">
+              <h3>Tezkor Tremor</h3>
+              <p>Juda tez va intensiv 100ms tebranish va 50ms pauzalar</p>
+            </div>
+            <button class="btn btn-outline btn-test-pattern" data-pattern="tremor">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <span data-i18n="btnTest">Sinash</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Custom Pattern Recording Box -->
+        <div class="custom-recorder-card">
+          <div class="card-header">
+            <h3 data-i18n="customRecordTitle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg> Shaxsiy Vibratsiya Ritm Yaratish</h3>
+            <p data-i18n="customRecordSubtitle">Quyidagi mayдонni bosib turing va o'zingiz istagan tebranish ritmini yozib oling!</p>
+          </div>
+
+          <div class="tap-recording-zone" id="tap-record-zone">
+            <div class="pulse-ring"></div>
+            <div class="tap-instruction" id="tap-instruction-text">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"/><path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v6"/><path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8.5"/><path d="M18 8a2 2 0 0 1 2 2v6a8 8 0 0 1-16 0v-2"/></svg>
+              <span data-i18n="tapInstruction">BU YERGA BOSIB TURING VA TEBRANISH RITMINI YOZING</span>
+            </div>
+          </div>
+
+          <div class="recorder-actions">
+            <span class="record-status-label" id="record-status-label" data-i18n="statusEmpty">Pattern holati: Bo'sh</span>
+            <div class="action-buttons">
+              <button class="btn btn-secondary" id="btn-clear-recorded" disabled data-i18n="btnClear">Tozalash</button>
+              <button class="btn btn-outline" id="btn-play-recorded" disabled data-i18n="btnListen">Sinab Ko'rish</button>
+              <button class="btn btn-primary" id="btn-save-recorded" disabled data-i18n="btnSavePattern">Saqlash</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- TAB 4: SETTINGS (NEW TAB) -->
+    <main class="tab-content" id="tab-settings">
+      <div class="settings-wrapper">
+        <div class="section-header">
+          <div>
+            <h2 data-i18n="settingsHeading">Sozlamalar</h2>
+            <p class="subtitle" data-i18n="settingsSubtitle">Ilova ko'rinishi, til va tebranish parametrlarini moslashtiring</p>
+          </div>
+        </div>
+
+        <div class="settings-group-card">
+          <!-- 1. Vibration Duration Setting -->
+          <div class="setting-row">
+            <div class="setting-meta">
+              <h3 data-i18n="settingVibroDuration">Vibratsiya Davomiyligi</h3>
+              <p data-i18n="settingVibroDurationSub">Signal chalanganda tebranish qancha vaqt davom etishi</p>
+            </div>
+            <div class="setting-control">
+              <select id="setting-vibro-duration" class="form-control custom-select">
+                <option value="15" data-i18n="dur15s">15 Soniya</option>
+                <option value="30" data-i18n="dur30s">30 Soniya</option>
+                <option value="45" selected data-i18n="dur45s">45 Soniya (Standart)</option>
+                <option value="60" data-i18n="dur60s">60 Soniya (1 minut)</option>
+                <option value="90" data-i18n="dur90s">90 Soniya</option>
+                <option value="0" data-i18n="durInfinite">Faqat o'zim to'xtatgunimcha (Cheksiz)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- 2. Interface Theme Setting (Dark vs Light) -->
+          <div class="setting-row">
+            <div class="setting-meta">
+              <h3 data-i18n="settingTheme">Interfeys Mavzusi</h3>
+              <p data-i18n="settingThemeSub">Qorong'u (Obsidian Dark) yoki Yorug' (Clean Light) rejim</p>
+            </div>
+            <div class="setting-control">
+              <select id="setting-theme" class="form-control custom-select">
+                <option value="dark" selected data-i18n="themeDark">Obsidian Qorong'u (Dark)</option>
+                <option value="light" data-i18n="themeLight">Sleek Yorug' (Light)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- 3. Language Setting (Uzbek, English, Russian) -->
+          <div class="setting-row">
+            <div class="setting-meta">
+              <h3 data-i18n="settingLanguage">Ilova Tili</h3>
+              <p data-i18n="settingLanguageSub">Interfeys matnlari tili</p>
+            </div>
+            <div class="setting-control">
+              <select id="setting-language" class="form-control custom-select">
+                <option value="uz" selected>O'zbekcha</option>
+                <option value="en">English</option>
+                <option value="ru">Русский</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- PWA / Phone App Info Card -->
+        <div class="pwa-install-info-card">
+          <div class="pwa-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v8M12 18v4M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/><circle cx="12" cy="12" r="4"/></svg>
+          </div>
+          <div class="pwa-text">
+            <h3>Telefonga O'rnatish (PWA)</h3>
+            <p>VibroClock ilovasini brauzeringiz menyusidan <strong>"Ekranga qo'shish" (Add to Home Screen)</strong> tugmasini bosib, alohida dastur sifatida telefonga o'rnatib olishingiz mumkin!</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <p>VibroClock &copy; 2026 — 100% Ovsiz Vibratsiyali Budilnik Veb-Ilovasi</p>
+    </footer>
+  </div>
+
+  <!-- MODAL: ADD / EDIT ALARM -->
+  <div class="modal-backdrop" id="modal-add-alarm">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="alarm-modal-title" data-i18n="alarmModalTitle">Yangi Budilnik Qo'shish</h3>
+        <button class="btn-close-modal" id="btn-close-alarm-modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="time-picker-large">
+          <input type="time" id="alarm-input-time" value="07:00" required />
+        </div>
+
+        <div class="form-group">
+          <label for="alarm-input-label" data-i18n="alarmNameLabel">Nomi / Izoh</label>
+          <input type="text" id="alarm-input-label" class="form-control" placeholder="Eslatma nomi" data-i18n-placeholder="alarmNamePlaceholder" />
+        </div>
+
+        <div class="form-group">
+          <label for="alarm-input-pattern" data-i18n="alarmPatternLabel">Vibratsiya Patterni</label>
+          <select id="alarm-input-pattern" class="form-control custom-select">
+            <option value="standard">Standart Pul's (500ms / 250ms)</option>
+            <option value="heartbeat">Yurak Urishi (Heartbeat)</option>
+            <option value="sos">SOS Shoshilinch Rejim</option>
+            <option value="tremor">Tezkor Tremor (100ms)</option>
+            <option value="wave">Ritmik Tebranish (Escalating)</option>
+            <option value="custom" id="opt-custom-pattern" disabled>O'zingiz yaratgan pattern (Bo'sh)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label data-i18n="alarmRepeatLabel">Takrorlanish kunlari</label>
+          <div class="days-selector">
+            <label class="day-chip"><input type="checkbox" value="1"> <span data-i18n="dayMon">Dsh</span></label>
+            <label class="day-chip"><input type="checkbox" value="2"> <span data-i18n="dayTue">Ssh</span></label>
+            <label class="day-chip"><input type="checkbox" value="3"> <span data-i18n="dayWed">Chr</span></label>
+            <label class="day-chip"><input type="checkbox" value="4"> <span data-i18n="dayThu">Pay</span></label>
+            <label class="day-chip"><input type="checkbox" value="5"> <span data-i18n="dayFri">Jum</span></label>
+            <label class="day-chip"><input type="checkbox" value="6"> <span data-i18n="daySat">Shb</span></label>
+            <label class="day-chip"><input type="checkbox" value="0"> <span data-i18n="daySun">Yak</span></label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" id="btn-cancel-alarm" data-i18n="btnCancel">Bekor qilish</button>
+        <button class="btn btn-primary" id="btn-save-alarm" data-i18n="btnSave">Saqlash</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIVE ALERT OVERLAY (FULL SCREEN ALERT FOR TRIGGERED ALARM/TIMER) -->
+  <div class="active-alert-overlay" id="active-alert-overlay">
+    <div class="alert-pulse-bg"></div>
+    <div class="alert-card">
+      <div class="alert-icon-wrapper">
+        <div class="shockwave-ring ring1"></div>
+        <div class="shockwave-ring ring2"></div>
+        <div class="shockwave-ring ring3"></div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="vibrating-icon">
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+          <circle cx="12" cy="12" r="6"/>
+          <polyline points="12 9 12 12 14 14"/>
+        </svg>
+      </div>
+
+      <div class="alert-type-badge" id="alert-type-badge" data-i18n="alertAlarmActive">Budilnik Ishlamoqda</div>
+      <h2 class="alert-title" id="alert-title">Ertalabki Turish</h2>
+      <p class="alert-subtitle" id="alert-subtitle" data-i18n="alertSilentNote">100% Ovsiz Vibratsiya Rejimi</p>
+
+      <!-- Progress Bar -->
+      <div class="auto-stop-progress">
+        <div class="auto-stop-bar" id="auto-stop-bar"></div>
+      </div>
+      <div class="auto-stop-timer-text" id="auto-stop-timer-text">45 soniyadan so'ng avtomatik to'xtaydi</div>
+
+      <div class="alert-actions">
+        <button class="btn btn-snooze btn-lg" id="btn-alert-snooze">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <span data-i18n="btnSnooze">5 Daqiqa Tanaffus (Snooze)</span>
+        </button>
+        <button class="btn btn-danger btn-lg" id="btn-alert-stop">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+          <span data-i18n="btnStop">TO'XTATISH (STOP)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./src/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+  "short_name": "VibroClock",
+  "name": "VibroClock - Ovsiz Vibratsiyali Budilnik va Taymer",
+  "description": "100% Ovsiz Vibratsiyali Budilnik va Taymer Veb-Ilovasi",
+  "icons": [
+    {
+      "src": "./assets/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "./assets/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#090b10",
+  "theme_color": "#090b10",
+  "display": "standalone",
+  "orientation": "portrait"
+}
