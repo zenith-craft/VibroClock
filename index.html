@@ -303,6 +303,37 @@
               </select>
             </div>
           </div>
+
+          <div class="divider"></div>
+
+          <!-- 4. Background Vibration Notifications Setting -->
+          <div class="setting-row">
+            <div class="setting-meta">
+              <h3 data-i18n="settingBgVibro">Orqa Fonda Tebranish (Ekran O'chiqda)</h3>
+              <p data-i18n="settingBgVibroSub">Telefon ekrani qulflanganida tebranib bildirishnoma chiqarish</p>
+            </div>
+            <div class="setting-control">
+              <button class="btn btn-outline" id="btn-request-notification">
+                <span id="btn-notif-status-text" data-i18n="btnEnableBgVibro">Ruxsat Berish 🔔</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- 5. Screen Wake Lock Setting -->
+          <div class="setting-row">
+            <div class="setting-meta">
+              <h3 data-i18n="settingWakeLock">Ekranni O'chirmaslik (Wake Lock)</h3>
+              <p data-i18n="settingWakeLockSub">Taymer ishlayotganda telefon ekrani avtomatik o'chib qolmasligi</p>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="setting-wake-lock" checked />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
         </div>
 
         <!-- PWA / Phone App Info Card -->
